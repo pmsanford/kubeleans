@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Kubeleans.Inter;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Orleans;
+using Orleans.Configuration;
 
 namespace Kubeleans.WebApp
 {
@@ -17,8 +19,17 @@ namespace Kubeleans.WebApp
     {
         private static IClusterClient BuildOrleansClient()
         {
+            var endpointIPStr = Environment.GetEnvironmentVariable("ORL_GATEWAY_IP");
+            var endpointPortStr = Environment.GetEnvironmentVariable("ORL_GATEWAY_PORT");
+            var endpointIP = IPAddress.Parse(endpointIPStr);
+            var endpointPort = int.Parse(endpointPortStr);
+            var endpoint = new IPEndPoint(endpointIP, endpointPort);
             var builder = new ClientBuilder()
-                .UseLocalhostClustering()
+                .Configure<ClusterOptions>(opts =>
+                {
+                    opts.ClusterId = "dev";
+                })
+                .UseStaticClustering(endpoint)
                 .ConfigureApplicationParts(config =>
                 {
                     config.AddApplicationPart(typeof(IContentGrain).Assembly);
@@ -28,7 +39,7 @@ namespace Kubeleans.WebApp
                     logging.AddConsole();
                 });
             var client = builder.Build();
-            client.Connect();
+            client.Connect().Wait();
             return client;
         }
         public Startup(IConfiguration configuration)

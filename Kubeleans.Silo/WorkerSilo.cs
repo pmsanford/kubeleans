@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Kubeleans.Impl;
@@ -28,9 +31,14 @@ namespace Kubeleans.Silo
 
         public async Task StartSilo()
         {
+            Action<DevelopmentClusterMembershipOptions> configureOpts = opts =>
+            {
+                opts.PrimarySiloEndpoint = new IPEndPoint(IPAddress.Parse("172.17.0.2"), 11111);
+            };
             var builder = new SiloHostBuilder()
-                .UseLocalhostClustering()
-                .Configure<EndpointOptions>(ip => ip.AdvertisedIPAddress = IPAddress.Loopback)
+                .UseDevelopmentClustering(configureOpts)
+                .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000, listenOnAnyHostAddress: true)
+                .Configure<EndpointOptions>(ip => ip.AdvertisedIPAddress = IPAddress.Parse("172.17.0.2"))
                 .AddMemoryGrainStorageAsDefault()
                 .ConfigureApplicationParts(config =>
                 {
