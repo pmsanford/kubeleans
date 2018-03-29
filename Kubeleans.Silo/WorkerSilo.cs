@@ -1,7 +1,11 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Kubeleans.Impl;
+using Kubeleans.Inter;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 
@@ -28,10 +32,17 @@ namespace Kubeleans.Silo
                 .UseLocalhostClustering()
                 .Configure<EndpointOptions>(ip => ip.AdvertisedIPAddress = IPAddress.Loopback)
                 .AddMemoryGrainStorageAsDefault()
-                .ConfigureApplicationParts(config => { /* TODO */ })
+                .ConfigureApplicationParts(config =>
+                {
+                    config.AddApplicationPart(typeof(ContentGrain).Assembly).WithReferences();
+                })
                 .ConfigureLogging(logger =>
                 {
                     logger.AddConsole();
+                })
+                .ConfigureServices(svc =>
+                {
+                    svc.AddSingleton<IConfig, Config>();
                 });
             using (var silo = builder.Build())
             {
