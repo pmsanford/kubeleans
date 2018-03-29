@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Orleans;
+using Orleans.Clustering.Kubernetes;
 using Orleans.Configuration;
 
 namespace Kubeleans.WebApp
@@ -19,17 +20,12 @@ namespace Kubeleans.WebApp
     {
         private static IClusterClient BuildOrleansClient()
         {
-            var endpointIPStr = Environment.GetEnvironmentVariable("ORL_GATEWAY_IP");
-            var endpointPortStr = Environment.GetEnvironmentVariable("ORL_GATEWAY_PORT");
-            var endpointIP = IPAddress.Parse(endpointIPStr);
-            var endpointPort = int.Parse(endpointPortStr);
-            var endpoint = new IPEndPoint(endpointIP, endpointPort);
             var builder = new ClientBuilder()
                 .Configure<ClusterOptions>(opts =>
                 {
                     opts.ClusterId = "dev";
                 })
-                .UseStaticClustering(endpoint)
+                .UseKubeGatewayListProvider()
                 .ConfigureApplicationParts(config =>
                 {
                     config.AddApplicationPart(typeof(IContentGrain).Assembly);

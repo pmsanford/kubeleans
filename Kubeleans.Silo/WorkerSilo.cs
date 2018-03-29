@@ -9,6 +9,7 @@ using Kubeleans.Inter;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Orleans;
+using Orleans.Clustering.Kubernetes;
 using Orleans.Configuration;
 using Orleans.Hosting;
 
@@ -36,9 +37,12 @@ namespace Kubeleans.Silo
                 opts.PrimarySiloEndpoint = new IPEndPoint(IPAddress.Parse("172.17.0.2"), 11111);
             };
             var builder = new SiloHostBuilder()
-                .UseDevelopmentClustering(configureOpts)
+                .Configure<ClusterOptions>(opts => opts.ClusterId = "dev")
                 .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000, listenOnAnyHostAddress: true)
-                .Configure<EndpointOptions>(ip => ip.AdvertisedIPAddress = IPAddress.Parse("172.17.0.2"))
+                .UseKubeMembership(opts =>
+                {
+                    opts.CanCreateResources = true;
+                })
                 .AddMemoryGrainStorageAsDefault()
                 .ConfigureApplicationParts(config =>
                 {
