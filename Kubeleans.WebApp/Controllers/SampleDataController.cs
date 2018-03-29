@@ -45,7 +45,7 @@ namespace Kubeleans.WebApp.Controllers
             foreach (var name in Names)
             {
                 var grain = client.GetGrain<IContentGrain>(name);
-                var content = await grain.GetFoodPane();
+                var content = await grain.GetFoodBio();
                 ret.Add(new FoodDatum
                 {
                     Name = name,

@@ -5,6 +5,6 @@ namespace Kubeleans.Inter
 {
     public interface IContentGrain : IGrainWithStringKey
     {
-        Task<string> GetFoodPane();
+        Task<string> GetFoodBio();
     }
 }

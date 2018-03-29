@@ -32,16 +32,12 @@ namespace Kubeleans.Silo
 
         public async Task StartSilo()
         {
-            Action<DevelopmentClusterMembershipOptions> configureOpts = opts =>
-            {
-                opts.PrimarySiloEndpoint = new IPEndPoint(IPAddress.Parse("172.17.0.2"), 11111);
-            };
             var builder = new SiloHostBuilder()
                 .Configure<ClusterOptions>(opts => opts.ClusterId = "dev")
                 .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000, listenOnAnyHostAddress: true)
                 .UseKubeMembership(opts =>
                 {
-                    opts.CanCreateResources = true;
+                    opts.CanCreateResources = false;
                 })
                 .AddMemoryGrainStorageAsDefault()
                 .ConfigureApplicationParts(config =>
@@ -55,6 +51,7 @@ namespace Kubeleans.Silo
                 .ConfigureServices(svc =>
                 {
                     svc.AddSingleton<IConfig, Config>();
+                    svc.AddSingleton<ISiloInfo>(new SiloInfo { SiloID = new Random().Next(0, 1000).ToString() });
                 });
             using (var silo = builder.Build())
             {
