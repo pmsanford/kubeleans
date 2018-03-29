@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kubeleans.Inter;
 using Microsoft.AspNetCore.Mvc;
+using Orleans;
 
 namespace Kubeleans.WebApp.Controllers
 {
@@ -14,6 +16,16 @@ namespace Kubeleans.WebApp.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
+        private static string[] Names = new string[] {
+            "Paul", "Dan", "Jon", "Greg", "Mark", "Ann"
+        };
+        private readonly IClusterClient client;
+
+        public SampleDataController(IClusterClient client)
+        {
+            this.client = client;
+        }
+
         [HttpGet("[action]")]
         public IEnumerable<WeatherForecast> WeatherForecasts()
         {
@@ -24,6 +36,29 @@ namespace Kubeleans.WebApp.Controllers
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             });
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<FoodDatum>> FoodData()
+        {
+            var ret = new List<FoodDatum>();
+            foreach (var name in Names)
+            {
+                var grain = client.GetGrain<IContentGrain>(name);
+                var content = await grain.GetFoodPane();
+                ret.Add(new FoodDatum
+                {
+                    Name = name,
+                    Content = content
+                });
+            }
+            return ret;
+        }
+
+        public class FoodDatum
+        {
+            public string Name { get; set; }
+            public string Content { get; set; }
         }
 
         public class WeatherForecast

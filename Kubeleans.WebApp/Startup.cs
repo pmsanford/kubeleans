@@ -28,7 +28,8 @@ namespace Kubeleans.WebApp
                     logging.AddConsole();
                 });
             var client = builder.Build();
-            return builder.Build();
+            client.Connect();
+            return client;
         }
         public Startup(IConfiguration configuration)
         {
@@ -40,11 +41,9 @@ namespace Kubeleans.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var client = BuildOrleansClient();
             services.AddMvc();
-            services.AddSingleton<IClusterClient>(s =>
-            {
-                return BuildOrleansClient();
-            });
+            services.AddSingleton<IClusterClient>(client);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
