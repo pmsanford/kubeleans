@@ -1,5 +1,5 @@
 ﻿using System;
-using Kubeleans.WebApp;
+using Kubeleans.Silo;
 
 namespace Kubeleans.Main
 {
@@ -7,7 +7,9 @@ namespace Kubeleans.Main
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"Hello, Docker!");
+            var silo = new WorkerSilo();
+            silo.StartSilo().Wait();
+            Console.ReadLine();
         }
     }
 }
