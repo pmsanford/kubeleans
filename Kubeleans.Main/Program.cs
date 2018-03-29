@@ -1,4 +1,5 @@
 ﻿using System;
+using Kubeleans.WebApp;
 
 namespace Kubeleans.Main
 {
@@ -6,7 +7,7 @@ namespace Kubeleans.Main
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine($"Hello, Docker!");
         }
     }
 }

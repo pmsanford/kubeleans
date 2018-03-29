@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Kubeleans.WebApp
 {
-    public class Program
+    public class WebRoot
     {
         public static void Main(string[] args)
         {
