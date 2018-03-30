@@ -6,7 +6,7 @@ Demo project for running an Orleans silo in Kubernetes.
 
 1. Set up your kubernetes-docker environment. There are two ways to do this:
     - Using the [Docker Kubernetes system in the Edge version of Docker.](https://blog.docker.com/2018/01/docker-mac-kubernetes/) This is the easiest way, and I recommend it, but (as of this writing) it is only available in Docker for macOS.
-    - Using [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/).
+    - Using [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/). Once you've set up Minikube, make sure you've run `eval $(minikube docker-env)` before continuing. 
 2. Clone this repo
 3. Run `make`
 
