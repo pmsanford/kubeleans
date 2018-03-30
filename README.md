@@ -23,3 +23,11 @@ Give this about 30 seconds to start up, then navigate to http://localhost:30000.
 
 # Cleaning up
 You can run `make clean` to delete the namespace in Kubernetes as well as removing the built images. 
+
+# The Interesting Parts
+Some of these projects have some pretty major boilerplate, so here are some links to the Orleans-relevant interesting content in the repo:
+- [Client connecting to Orleans cluster](Kubeleans.WebApp/Startup.cs#L21)
+- [Client making requests to the cluster](Kubeleans.WebApp/Controllers/SampleDataController.cs#L42)
+- [Silo startup](Kubeleans.Silo/WorkerSilo.cs#L33)
+- [Actual grain implementation](Kubeleans.Impl/ContentGrain.cs#L19)
+- [Silo deployment definition](Kubeleans.Deployments/kubeleans-silo.yaml)
