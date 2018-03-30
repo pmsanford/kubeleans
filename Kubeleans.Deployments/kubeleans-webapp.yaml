@@ -1,0 +1,18 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: webapp
+  namespace: kubeleans
+spec:
+  selector:
+    matchLabels:
+      app: kubeleans-webapp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kubeleans-webapp
+    spec:
+      containers:
+      - name: kubeleans-webapp
+        image: kubeleans:client

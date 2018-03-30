@@ -1,0 +1,21 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: silo
+  namespace: kubeleans
+spec:
+  selector:
+    matchLabels:
+      app: kubeleans-silo
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: kubeleans-silo
+    spec:
+      containers:
+      - name: kubeleans-silo
+        image: kubeleans:silo
+        ports:
+          - containerPort: 11111
+          - containerPort: 30000
