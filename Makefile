@@ -12,6 +12,6 @@ app:
 	docker build -f Client.Dockerfile -t kubeleans:client .
 
 clean:
-	kubectl delete -f Kubeleans.Deployments/kubeleans-namespace.yaml || true
-	docker rmi kubeleans:silo || true
-	docker rmi kubeleans:client || true
+	kubectl delete -f Kubeleans.Deployments/kubeleans-namespace.yaml --force=true --now=true || true
+	docker rmi -f kubeleans:silo || true
+	docker rmi -f kubeleans:client || true
