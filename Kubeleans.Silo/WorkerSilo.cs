@@ -37,7 +37,7 @@ namespace Kubeleans.Silo
                 .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000, listenOnAnyHostAddress: true)
                 .UseKubeMembership(opts =>
                 {
-                    opts.CanCreateResources = false;
+                    opts.CanCreateResources = true;
                 })
                 .AddMemoryGrainStorageAsDefault()
                 .ConfigureApplicationParts(config =>
