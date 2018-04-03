@@ -15,4 +15,6 @@ spec:
     spec:
       containers:
       - name: kubeleans-webapp
-        image: kubeleans:client
+        image: kubeleans:main
+        workingDir: /app/webapp
+        args: ["Kubeleans.WebApp.dll"]

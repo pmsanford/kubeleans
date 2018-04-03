@@ -15,7 +15,9 @@ spec:
     spec:
       containers:
       - name: kubeleans-silo
-        image: kubeleans:silo
+        image: kubeleans:main
         ports:
           - containerPort: 11111
           - containerPort: 30000
+        workingDir: /app/main
+        args: ["Kubeleans.Main.dll"]
